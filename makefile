@@ -19,8 +19,8 @@ ASANFLAGS += -fno-omit-frame-pointer
 
 .PHONY: exec
 exec: ./shell.c
-	@$(CC) $(CFLAGS) -o Shell Shell.c
-	@./Shell
+	@$(CC) $(CFLAGS) -o Shell.exe Shell.c
+	@./Shell.exe
 
 .PHONY: test
 test: tests.out
