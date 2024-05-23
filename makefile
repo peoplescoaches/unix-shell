@@ -17,10 +17,22 @@ ASANFLAGS  = -fsanitize=address
 ASANFLAGS += -fno-common
 ASANFLAGS += -fno-omit-frame-pointer
 
-.PHONY: exec
-exec: ./shell.c
-	@$(CC) $(CFLAGS) -o Shell.exe Shell.c
-	@./Shell.exe
+ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+
+.PHONY: setup_zsh
+setup_zsh:
+	@echo "export PATH=$$PATH:$(ROOT_DIR)" >> ~/.zshrc
+	@zsh
+	@source ~/.zshrc
+
+.PHONY: setup_bash
+setup_bash:
+	@echo "export PATH=$$PATH:$(ROOT_DIR)" >> ~/.bash_profile
+	@source ~/.bash_profile
+
+.PHONY: compile
+compile: ./shell.c
+	@$(CC) $(CFLAGS) -o pcshell shell.c
 
 .PHONY: test
 test: tests.out
@@ -28,7 +40,7 @@ test: tests.out
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.out *.out.dSYM
+	rm -rf *.o *.out *.out.dSYM *.dSYM pcshell
 
 tests.out: ./test_shell.c
 	@echo Compiling $@

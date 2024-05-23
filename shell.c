@@ -3,6 +3,9 @@
 #include <stdio.h>
 
 int main(void) {
-    printf("go people's coaches\n");
+    char command[50];
+    printf("pcshell> ");
+    scanf("%s", command);
+    printf("%s\n", command);
     return 0;
 }
