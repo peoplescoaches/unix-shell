@@ -18,6 +18,7 @@ ASANFLAGS += -fno-common
 ASANFLAGS += -fno-omit-frame-pointer
 
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+BUILD_DIR := build
 
 .PHONY: setup_zsh
 setup_zsh:
@@ -31,17 +32,17 @@ setup_bash:
 	@source ~/.bash_profile
 
 .PHONY: compile
-compile: ./shell.c
-	@$(CC) $(CFLAGS) -o pcshell shell.c
+compile: ./src/main.c ./src/shell.c
+	@$(CC) $(CFLAGS) -o pcshell ./src/main.c ./src/shell.c $(ASANFLAGS)
 
 .PHONY: test
 test: tests.out
-	@./tests.out
+	@./$(BUILD_DIR)/tests.out
 
 .PHONY: clean
 clean:
 	rm -rf *.o *.out *.out.dSYM *.dSYM pcshell
 
-tests.out: ./test_shell.c
+tests.out: ./test/test_shell.c ./src/shell.c
 	@echo Compiling $@
-	@$(CC) $(CFLAGS) test-framework/unity.c ./test_shell.c -o tests.out $(LIBS)
+	@$(CC) $(CFLAGS) test-framework/unity.c ./src/shell.c ./test/test_shell.c -o $(BUILD_DIR)/tests.out $(LIBS)
