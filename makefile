@@ -36,13 +36,16 @@ compile: ./src/main.c ./src/shell.c
 	@$(CC) $(CFLAGS) -o pcshell ./src/main.c ./src/shell.c $(ASANFLAGS)
 
 .PHONY: test
-test: tests.out
+test: $(BUILD_DIR) tests.out
 	@./$(BUILD_DIR)/tests.out
 
 .PHONY: clean
 clean:
-	rm -rf *.o *.out *.out.dSYM *.dSYM pcshell
+	rm -rf *.o *.out *.out.dSYM *.dSYM pcshell $(BUILD_DIR)
 
 tests.out: ./test/test_shell.c ./src/shell.c
 	@echo Compiling $@
 	@$(CC) $(CFLAGS) test-framework/unity.c ./src/shell.c ./test/test_shell.c -o $(BUILD_DIR)/tests.out $(LIBS)
+
+$(BUILD_DIR):
+	@mkdir -p $(BUILD_DIR)
