@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "unity.h": "c",
-        "bitset": "c",
-        "cstdio": "c",
-        "shell.h": "c"
-    }
-}

@@ -15,7 +15,7 @@ static void test_initial_shell_prompt(void)
 {
    // redirect stdin and stdout streams to corresponding text files
    freopen("build/test_input.txt", "w+", stdin);
-   fprintf(stdin, "test\n");
+   fprintf(stdin, "test\nexit\n");
    // rewind to beginning of input file
    rewind(stdin); 
    freopen("build/test_output.txt", "w+", stdout);
@@ -26,13 +26,18 @@ static void test_initial_shell_prompt(void)
    // flush stdout to make sure all output is written to file
    fflush(stdout);
 
+   char output[50][20];
    // set stream to read from file
    FILE *file = fopen("build/test_output.txt", "r");
-   
-   // get string from the stream to get its contents
-   char output[50];
-   fgets(output, sizeof(output), file);
-   
+   if(file == NULL){
+        printf("File not found!");
+   } else {
+      // get string from the stream to get its contents
+      int row = 0;
+      while(fgets(output[row], sizeof(output[0]), file) != NULL) {
+         ++row;
+      }
+   }
    // close the files
    fclose(stdin);
    fclose(stdout);
@@ -41,10 +46,10 @@ static void test_initial_shell_prompt(void)
    stdout = fdopen(dup(fileno(stderr)), "w");
 
    // verify text in shell command line
-   TEST_ASSERT_EQUAL_STRING("pcshell> test\n", output);
+   TEST_ASSERT_EQUAL_STRING("hello test\n", output[1]);
 
    // print output to console for debugging
-   fprintf(stderr, "Test output:\n%s\n", output);
+   fprintf(stderr, "Test output:\n%s\n", output[1]);
 }
 
 int main(void)
