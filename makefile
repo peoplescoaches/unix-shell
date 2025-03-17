@@ -13,9 +13,10 @@ CFLAGS += -Werror
 CFLAGS += -Wmissing-declarations
 CFLAGS += -DUNITY_SUPPORT_64 -DUNITY_OUTPUT_COLOR
 
-ASANFLAGS  = -fsanitize=address
-ASANFLAGS += -fno-common
-ASANFLAGS += -fno-omit-frame-pointer
+# removed from compile step
+# ASANFLAGS  = -fsanitize=address
+# ASANFLAGS += -fno-common
+# ASANFLAGS += -fno-omit-frame-pointer
 
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 BUILD_DIR := build
@@ -33,7 +34,7 @@ setup_bash:
 
 .PHONY: compile
 compile: ./src/main.c ./src/shell.c
-	@$(CC) $(CFLAGS) -o pcshell ./src/main.c ./src/shell.c $(ASANFLAGS)
+	@$(CC) $(CFLAGS) -o pcshell ./src/main.c ./src/shell.c
 
 .PHONY: test
 test: $(BUILD_DIR) tests.out
